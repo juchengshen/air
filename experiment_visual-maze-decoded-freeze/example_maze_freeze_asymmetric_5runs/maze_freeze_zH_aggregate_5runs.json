@@ -1,0 +1,155 @@
+{
+  "runs": [
+    "run1",
+    "run2",
+    "run4",
+    "run5",
+    "run3"
+  ],
+  "metrics": {
+    "Total solution-mask flips: normal": {
+      "n_runs": 5,
+      "mean_across_runs": 847.9436000000002,
+      "std_across_runs": 548.2546816619991,
+      "per_run_means": {
+        "run1": 251.634,
+        "run2": 603.53,
+        "run4": 1204.409,
+        "run5": 569.165,
+        "run3": 1610.98
+      }
+    },
+    "Total solution-mask flips: freeze z_H": {
+      "n_runs": 5,
+      "mean_across_runs": 2831.066,
+      "std_across_runs": 3241.163781128393,
+      "per_run_means": {
+        "run1": 465.127,
+        "run2": 1785.286,
+        "run4": 1466.84,
+        "run5": 1897.645,
+        "run3": 8540.432
+      }
+    },
+    "Delta total flips (freeze - normal)": {
+      "n_runs": 5,
+      "mean_across_runs": 1983.1224000000002,
+      "std_across_runs": 2811.9961058890713,
+      "per_run_means": {
+        "run1": 213.493,
+        "run2": 1181.756,
+        "run4": 262.431,
+        "run5": 1328.48,
+        "run3": 6929.452
+      }
+    },
+    "Total color changes: normal": {
+      "n_runs": 5,
+      "mean_across_runs": 1289.4912,
+      "std_across_runs": 529.0008960755171,
+      "per_run_means": {
+        "run1": 1265.304,
+        "run2": 1654.804,
+        "run4": 1968.777,
+        "run5": 738.786,
+        "run3": 819.785
+      }
+    },
+    "Total color changes: freeze z_H": {
+      "n_runs": 5,
+      "mean_across_runs": 2304.8707999999997,
+      "std_across_runs": 733.8080721794357,
+      "per_run_means": {
+        "run1": 2453.777,
+        "run2": 3283.727,
+        "run4": 2441.692,
+        "run5": 1251.118,
+        "run3": 2094.04
+      }
+    },
+    "Delta total color changes (freeze - normal)": {
+      "n_runs": 5,
+      "mean_across_runs": 1015.3795999999999,
+      "std_across_runs": 505.15790393974834,
+      "per_run_means": {
+        "run1": 1188.473,
+        "run2": 1628.923,
+        "run4": 472.915,
+        "run5": 512.332,
+        "run3": 1274.255
+      }
+    },
+    "Mean flips per step: normal": {
+      "n_runs": 5,
+      "mean_across_runs": 8.92572,
+      "std_across_runs": 5.771110009954757,
+      "per_run_means": {
+        "run1": 2.6488,
+        "run2": 6.3529,
+        "run4": 12.678,
+        "run5": 5.9912,
+        "run3": 16.9577
+      }
+    },
+    "Mean flips per step: freeze z_H": {
+      "n_runs": 5,
+      "mean_across_runs": 29.8007,
+      "std_across_runs": 34.117517336040144,
+      "per_run_means": {
+        "run1": 4.8961,
+        "run2": 18.7925,
+        "run4": 15.4404,
+        "run5": 19.9752,
+        "run3": 89.8993
+      }
+    },
+    "Mean color changes per step: normal": {
+      "n_runs": 5,
+      "mean_across_runs": 13.573599999999999,
+      "std_across_runs": 5.56844445469289,
+      "per_run_means": {
+        "run1": 13.319,
+        "run2": 17.419,
+        "run4": 20.724,
+        "run5": 7.7767,
+        "run3": 8.6293
+      }
+    },
+    "Mean color changes per step: freeze z_H": {
+      "n_runs": 5,
+      "mean_across_runs": 24.26178,
+      "std_across_runs": 7.724265780448003,
+      "per_run_means": {
+        "run1": 25.8292,
+        "run2": 34.5655,
+        "run4": 25.702,
+        "run5": 13.1697,
+        "run3": 22.0425
+      }
+    },
+    "Exact accuracy: normal": {
+      "n_runs": 5,
+      "mean_across_runs": 0.0,
+      "std_across_runs": 0.0,
+      "per_run_means": {
+        "run1": 0.0,
+        "run2": 0.0,
+        "run4": 0.0,
+        "run5": 0.0,
+        "run3": 0.0
+      }
+    },
+    "Exact accuracy: freeze z_H": {
+      "n_runs": 5,
+      "mean_across_runs": 0.0,
+      "std_across_runs": 0.0,
+      "per_run_means": {
+        "run1": 0.0,
+        "run2": 0.0,
+        "run4": 0.0,
+        "run5": 0.0,
+        "run3": 0.0
+      }
+    }
+  }
+}

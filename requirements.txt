@@ -1,0 +1,11 @@
+torch
+# AdamATan2 is bundled as adam_atan2.zip. Unzip it in the repo root before training.
+einops
+tqdm
+coolname
+pydantic
+argdantic
+wandb
+omegaconf
+hydra-core
+huggingface_hub
