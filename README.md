@@ -151,13 +151,9 @@ Each experiment folder ships **precomputed `example_*` outputs** so the figures 
 | 8 × NVIDIA H200 (80 GB) | Single Maze training run | ~3 hours per run |
 | Any Ampere or newer GPU | Inference / freeze / attention analysis | ≤ 16 GB sufficient for batched eval |
 
-<<<<<<< HEAD
-### Attention Analysis
-=======
 Total compute reported in the paper (all sweeps + preliminary runs): ~500 GPU-hours.
 
 ## 📊 Results Highlights
->>>>>>> 44e53bc (Rewrite README in AI-OWLS / max-k-cut style)
 
 ### Injection-asymmetry ablation — asymmetric matches the two-network baseline at half the parameters
 
@@ -250,16 +246,10 @@ bash experiment_attention-analysis-sudoku/render_example.sh
 # Maze counterparts
 bash experiment_attention-analysis-maze/generate_bar_data.sh
 bash experiment_attention-analysis-maze/multilayer_figure.sh
-<<<<<<< HEAD
-```
-
-`generate_bar_data.py` captures L/H attention maps over 1,000 test puzzles at sub-steps `{2,4,6,8,10,12,14,15}` and writes per-layer JSON files into `bar_data/`.
-=======
 bash experiment_attention-analysis-maze/render_example.sh
 ```
 
 `generate_bar_data.py` captures L/H attention maps over 1,000 test puzzles at sub-steps {2, 4, 6, 8, 10, 12, 14, 15} and writes per-layer JSON into `bar_data/`. `render_example.py` reads the included `example_data/*.npz` and `*_index.json` to recreate the core-comparison and temporal-evolution heatmaps shown in the blog post.
->>>>>>> 44e53bc (Rewrite README in AI-OWLS / max-k-cut style)
 
 ## 📝 Citation
 
@@ -275,21 +265,6 @@ bash experiment_attention-analysis-maze/render_example.sh
 
 ## 📖 Blog Post
 
-<<<<<<< HEAD
-If you find this repository useful, please consider citing:
-
-```bibtex
-@misc{shen2026modelrolesemergentspecialization,
-      title={One Model, Two Roles: Emergent Specialization in a Shared Recurrent Transformer},
-      author={Jucheng Shen and Barbara Su and Anastasios Kyrillidis},
-      year={2026},
-      eprint={2605.17811},
-      archivePrefix={arXiv},
-      primaryClass={cs.LG},
-      url={https://arxiv.org/abs/2605.17811},
-}
-```
-=======
 - 🧠 [**One Model, Two Roles**](https://akyrillidis.github.io/aiowls/asymmetric_input.html) — Quanta-style walkthrough on AI-OWLS. Decoded rollouts, the symmetric control, the injection-asymmetry ablation, the level-token recovery, the freeze experiments, and the attention split — for a reader outside the subfield.
 
 ## 👥 Authors
@@ -304,4 +279,3 @@ Jucheng Shen and Wenyi (Barbara) Su contributed equally.
 ## 📄 License
 
 [Apache License 2.0](./LICENSE).
->>>>>>> 44e53bc (Rewrite README in AI-OWLS / max-k-cut style)
