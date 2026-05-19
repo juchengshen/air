@@ -4,7 +4,7 @@ This repository provides the **official PyTorch implementation** of our paper:
 
 > **"One Model, Two Roles: Emergent Specialization in a Shared Recurrent Transformer"**<br>
 > *[Jucheng Shen](https://juchengshen.github.io/)\*, [Wenyi Su](https://www.linkedin.com/in/barbara-su-966314268/)\*, [Anastasios Kyrillidis](https://akyrillidis.github.io/about/)*<br>
-> Coming soon
+> [arXiv:2605.17811](https://arxiv.org/abs/2605.17811)
 
 AIR studies how a shared recurrent transformer can develop specialized low-level and high-level computation roles while keeping a single set of model parameters. This codebase contains the AIR model variants, Sudoku-Extreme and Maze training scripts, and the analysis utilities used for the paper experiments.
 
@@ -116,8 +116,6 @@ Run the visual experiment scripts in:
 
 The `*_freeze_*.sh` and `decode_*_intermediate_first_10.sh` scripts require trained checkpoints before they can run. By default they look for checkpoint files and the matching `all_config.yaml` under the repo-local `checkpoints/` paths written in each script. Edit the checkpoint path in the script, or set the corresponding environment variable such as `AIR_SUDOKU_CKPT_PATH` or `AIR_MAZE_CKPT_PATH`, if your checkpoint is stored elsewhere.
 
-These directories include precomputed `example_*` outputs so the expected summaries, aggregate files, and decoded visualizations can be inspected without rerunning the model.
-
 ### Attention Analysis
 
 Regenerate the bar-chart data and figures with:
@@ -130,14 +128,7 @@ bash experiment_attention-analysis-maze/generate_bar_data.sh
 bash experiment_attention-analysis-maze/multilayer_figure.sh
 ```
 
-Regenerate the example heatmaps from the included precomputed data:
-
-```bash
-bash experiment_attention-analysis-sudoku/render_example.sh
-bash experiment_attention-analysis-maze/render_example.sh
-```
-
-`generate_bar_data.py` captures L/H attention maps over 1,000 test puzzles at sub-steps `{2,4,6,8,10,12,14,15}` and writes per-layer JSON files into `bar_data/`. `render_example.py` reads the included `example_data/*.npz` and `*_index.json` files to recreate the core-comparison and temporal-evolution heatmaps.
+`generate_bar_data.py` captures L/H attention maps over 1,000 test puzzles at sub-steps `{2,4,6,8,10,12,14,15}` and writes per-layer JSON files into `bar_data/`.
 
 ## Repository Layout
 
@@ -153,4 +144,16 @@ bash experiment_attention-analysis-maze/render_example.sh
 
 ## Citation
 
-If you find this repository useful, please consider citing our paper once it is public. Citation details will be added here when available.
+If you find this repository useful, please consider citing:
+
+```bibtex
+@misc{shen2026modelrolesemergentspecialization,
+      title={One Model, Two Roles: Emergent Specialization in a Shared Recurrent Transformer},
+      author={Jucheng Shen and Barbara Su and Anastasios Kyrillidis},
+      year={2026},
+      eprint={2605.17811},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2605.17811},
+}
+```
