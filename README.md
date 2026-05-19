@@ -42,6 +42,18 @@ Across Sudoku-Extreme and Maze-30×30, this single architectural detail causes t
 - **State coupling, not redundancy** — freeze experiments collapse final accuracy to 0% on both tasks; the two states are load-bearing in a coupled feedback loop
 - **Open-source reproduction** — every figure, table, and ablation in the paper has a corresponding shell script under `experiment_*/`
 
+### What the two states look like
+
+<p align="center">
+  <img src="assets/sudoku_decode.png" alt="Decoded zH vs zL on Sudoku — zH stays fully committed, zL holds some cells as BLANK and shifts those blanks across sub-steps" width="820"/>
+</p>
+<p align="center"><em>Sudoku &mdash; left columns: <strong>z<sub>H</sub></strong> (fully committed). Right columns: <strong>z<sub>L</sub></strong> (some cells held as <code>BLANK</code>; the held-back set shifts across sub-steps).</em></p>
+
+<p align="center">
+  <img src="assets/maze_decode.png" alt="Decoded zH vs zL on a 30x30 Maze — zH commits to a complete layout, zL leaves regions undecided and rearranges its uncertainty" width="820"/>
+</p>
+<p align="center"><em>Maze-30&times;30 &mdash; <strong>z<sub>H</sub></strong> commits to a full layout; <strong>z<sub>L</sub></strong> holds regions as <code>PAD</code> and revises them locally as the rollout progresses.</em></p>
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -200,6 +212,12 @@ A level token that occupies its own sequence position (prepend + strip) recovers
 | 3 | 0.244 ± 0.002 | 0.182 ± 0.002 | 0.037 ± 0.002 |
 
 L-updates put **~47% more attention mass** inside the constraint neighbourhood than H-updates at the deepest layer (Sudoku, control queries). Violation-specific routing emerges only in the deeper layers.
+
+<p align="center">
+  <img src="assets/sudoku_attention_example.png" alt="A single Sudoku puzzle showing the L-update attention concentrating inside the constraint neighbourhood while the H-update spreads attention across the full board" width="820"/>
+</p>
+<p align="center"><em>One blank query cell (puzzle <code>p0121</code>, query <code>r2c6</code>, layer 0). The L-update places about <strong>0.81</strong> of its attention mass inside the constraint neighbourhood; the H-update places only <strong>0.24</strong>. Same puzzle, same query, same head &mdash; only the update type differs.</em></p>
+
 
 ### Freeze interventions — both states are load-bearing
 
