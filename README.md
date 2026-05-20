@@ -153,8 +153,6 @@ bash experiment_operator-form-control/run_all_operator_form_control.sh
 └── requirements.txt
 ```
 
-Each experiment folder ships **precomputed `example_*` outputs** so the figures in the paper can be regenerated from cached intermediate data without retraining.
-
 ## 💻 Hardware
 
 | Hardware | Use | Notes |
@@ -249,8 +247,6 @@ bash experiment_addition-prepend-strip-no-strip/train_sudoku_L2x_H2x_input_token
 
 Both `experiment_visual-*-decoded-freeze/` folders contain `decode_*_intermediate_first_10.sh`, `*_freeze_zH_zL_*5runs.sh`, and `*_freeze_zH_zL_symmetric.sh`. These require trained checkpoints; by default they look under `checkpoints/` paths configured in each script. Override via `AIR_SUDOKU_CKPT_PATH` / `AIR_MAZE_CKPT_PATH`, or edit the path at the top of the script.
 
-Precomputed `example_*` outputs ship with each folder so the four-panel decoded figures and freeze plots can be regenerated without retraining.
-
 ### Attention analysis
 
 ```bash
@@ -258,16 +254,12 @@ Precomputed `example_*` outputs ship with each folder so the four-panel decoded 
 bash experiment_attention-analysis-sudoku/generate_bar_data.sh
 bash experiment_attention-analysis-sudoku/multilayer_figure.sh
 
-# Single-puzzle example heatmaps (uses bundled example_data/)
-bash experiment_attention-analysis-sudoku/render_example.sh
-
 # Maze counterparts
 bash experiment_attention-analysis-maze/generate_bar_data.sh
 bash experiment_attention-analysis-maze/multilayer_figure.sh
-bash experiment_attention-analysis-maze/render_example.sh
 ```
 
-`generate_bar_data.py` captures L/H attention maps over 1,000 test puzzles at sub-steps {2, 4, 6, 8, 10, 12, 14, 15} and writes per-layer JSON into `bar_data/`. `render_example.py` reads the included `example_data/*.npz` and `*_index.json` to recreate the core-comparison and temporal-evolution heatmaps shown in the blog post.
+`generate_bar_data.py` captures L/H attention maps over 1,000 test puzzles at sub-steps {2, 4, 6, 8, 10, 12, 14, 15} and writes per-layer JSON into `bar_data/`.
 
 ## 📝 Citation
 
@@ -281,7 +273,7 @@ bash experiment_attention-analysis-maze/render_example.sh
 }
 ```
 
-## 📖 Blog Post
+## 📖 Blog
 
 - 🧠 [**One Model, Two Roles**](https://akyrillidis.github.io/aiowls/asymmetric_input.html) — Quanta-style walkthrough on AI-OWLS. Decoded rollouts, the symmetric control, the injection-asymmetry ablation, the level-token recovery, the freeze experiments, and the attention split — for a reader outside the subfield.
 
