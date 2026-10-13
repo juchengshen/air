@@ -20,7 +20,9 @@ echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting Sudoku attention interventions acr
 
 for run_label in run1 run2 run3 run4 run5
 do
-  ckpt_path="checkpoints/Sudoku/air_Lx_H_lr1e4_bs768_20k_epochs_${run_label}/${CKPT_STEPS[$run_label]}"
+  ckpt_step="${CKPT_STEPS[$run_label]}"
+  ckpt_dir="checkpoints/Sudoku/air_Lx_H_lr1e4_bs768_20k_epochs_${run_label}"
+  ckpt_path="${ckpt_dir}/${ckpt_step}"
 
   if [[ ! -f "$ckpt_path" ]]; then
     echo "Checkpoint file not found: $ckpt_path" >&2

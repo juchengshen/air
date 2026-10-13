@@ -224,9 +224,9 @@ def settings_for_condition(condition: str, knockout_masks: Dict[str, torch.Tenso
 
 
 @contextmanager
-def attention_intervention(model: torch.nn.Module, settings: InterventionSettings) -> Iterator[None]:
+def attention_intervention(air_model: torch.nn.Module, settings: InterventionSettings) -> Iterator[None]:
     """Temporarily route the model's inner forward through the intervened version."""
-    inner = model.inner
+    inner = air_model.inner
     original_forward = inner.forward
 
     def wrapped_forward(self: torch.nn.Module, carry, batch):
