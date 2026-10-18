@@ -1,5 +1,6 @@
 #!/bin/bash
 # Runs used a single H200 GPU, 16GB CPU memory, and a 2-hour wall time.
+# Freeze experiments on symmetric Lx_Hx Maze checkpoints for seeds 2-4 (run names run3-run5), as in the paper.
 
 set -euo pipefail
 
@@ -15,17 +16,17 @@ export AIR_MAZE_NUM_QUESTIONS=1000  # Note: Maze whole test split is 1000 questi
 
 mkdir -p "$SCRIPT_DIR"
 
-RUN_ROOT="$SCRIPT_DIR/maze_freeze_asymmetric_5runs"
+RUN_ROOT="$SCRIPT_DIR/maze_freeze_symmetric_3runs"
 mkdir -p "$RUN_ROOT"
 MANIFEST_FILE="${RUN_ROOT}/run_manifest.txt"
 : > "$MANIFEST_FILE"
 
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting visual Maze freeze experiments across 5 runs (1000 samples each)"
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting visual Maze freeze experiments for Lx_Hx across 3 runs (1000 samples each)"
 
-for run_label in run1 run2 run3 run4 run5
+for run_label in run3 run4 run5
 do
   ckpt_step="step_26040"
-  ckpt_dir="checkpoints/Maze/air_Lx_H_bs768_lr1e4_20k_epochs_${run_label}"
+  ckpt_dir="checkpoints/Maze/air_Lx_Hx_bs768_lr1e4_20k_epochs_${run_label}"
 
   export AIR_MAZE_CKPT_PATH="${ckpt_dir}/${ckpt_step}"
   export AIR_MAZE_TEST_OUT_DIR="${RUN_ROOT}/${run_label}"
@@ -45,7 +46,6 @@ do
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] Using checkpoint ${AIR_MAZE_CKPT_PATH}"
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] Writing outputs to ${AIR_MAZE_TEST_OUT_DIR}"
 
-
   for script in \
     experiment_visual-maze-decoded-freeze/maze_freeze_zH.py \
     experiment_visual-maze-decoded-freeze/maze_freeze_zL.py
@@ -56,7 +56,10 @@ do
   done
 done
 
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] Computing 5-run aggregate summaries"
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] Computing 3-run aggregate summaries"
 python experiment_visual-maze-decoded-freeze/plot_maze_freeze.py --aggregate-manifest "$MANIFEST_FILE"
 
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] Completed visual Maze freeze experiments across 5 runs"
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] Plotting per-seed results"
+python experiment_visual-maze-decoded-freeze/plot_maze_freeze_per_seed.py --manifest "$MANIFEST_FILE"
+
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] Completed visual Maze freeze experiments for Lx_Hx across 3 runs"

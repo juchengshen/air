@@ -64,6 +64,7 @@ def apply_sudoku_l_update(
 
     if module_name in {
         "air_1net_Lx_H",
+        "air_1net_Lx_Hx",
         "air_learned_input",
         "air_mHC",
         "air_zL_noblank",
@@ -103,7 +104,7 @@ def apply_sudoku_h_update(
     """Apply the architecture-specific H update used by the loaded Sudoku variant."""
     module_name = inner.__class__.__module__.rsplit(".", 1)[-1]
 
-    if module_name == "air_1net_L2x_Hx":
+    if module_name in {"air_1net_L2x_Hx", "air_1net_Lx_Hx"}:
         return inner.f_level(z_H + input_embeddings, z_L, **seq_info)
 
     return inner.f_level(z_H, z_L, **seq_info)

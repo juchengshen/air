@@ -24,7 +24,7 @@ OMP_NUM_THREADS=8 python pretrain.py \
   weight_decay=1.0 puzzle_emb_weight_decay=1.0 \
   +seed=0 \
   +project_name=Sudoku_new \
-  +run_name=air_L2x_H2x_input_token_prepend_no_strip_lr1e4_bs768_20k_epochs_run1 \
-  arch.name=air.air_1net_L2x_H2x_input_token_prepend_no_strip@AIR
+  +run_name=air_Lx_Hx_input_token_prepend_lr1e4_bs768_20k_epochs_run1 \
+  arch.name=air.air_1net_Lx_Hx_input_token_prepend@AIR
 
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] Training suite completed"

@@ -206,8 +206,8 @@ def write_aggregate_from_manifest(manifest_path: Path, *, make_plots: bool) -> l
             rows.append((run_label, Path(out_dir)))
 
     artifacts = [
-        ("sudoku_freeze_zH_results.json", "sudoku_freeze_zH_aggregate_5runs"),
-        ("sudoku_freeze_zL_results.json", "sudoku_freeze_zL_aggregate_5runs"),
+        ("sudoku_freeze_zH_results.json", "sudoku_freeze_zH"),
+        ("sudoku_freeze_zL_results.json", "sudoku_freeze_zL"),
     ]
 
     written: list[Path] = []
@@ -232,6 +232,7 @@ def write_aggregate_from_manifest(manifest_path: Path, *, make_plots: bool) -> l
             }
 
         root_dir = rows[0][1].parent if rows else Path(".")
+        out_prefix = f"{out_prefix}_aggregate_{len(rows)}runs"
         json_path = root_dir / f"{out_prefix}.json"
         md_path = root_dir / f"{out_prefix}.md"
 
@@ -262,7 +263,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("json_paths", nargs="*", type=Path, help="Sudoku freeze result or aggregate JSON files")
     parser.add_argument("--output", type=Path, help="Output PNG path; only valid with one input JSON")
-    parser.add_argument("--aggregate-manifest", type=Path, help="Manifest with run_label|output_dir rows for 5-run aggregation")
+    parser.add_argument("--aggregate-manifest", type=Path, help="Manifest with run_label|output_dir rows for multi-run aggregation")
     parser.add_argument("--no-plot", action="store_true", help="With --aggregate-manifest, write JSON/Markdown only")
     args = parser.parse_args()
 

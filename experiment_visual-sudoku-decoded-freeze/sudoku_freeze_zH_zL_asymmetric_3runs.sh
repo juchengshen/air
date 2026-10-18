@@ -1,5 +1,6 @@
 #!/bin/bash
 # Runs used a single H200 GPU, 16GB CPU memory, and a 24-hour wall time.
+# Freeze experiments on AIR (asymmetric Lx_H) Sudoku checkpoints for seeds 0-2 (run names run1-run3), as in the paper.
 
 set -euo pipefail
 
@@ -15,14 +16,14 @@ export AIR_SUDOKU_NUM_QUESTIONS=1000
 
 mkdir -p "$SCRIPT_DIR"
 
-RUN_ROOT="$SCRIPT_DIR/sudoku_freeze_asymmetric_5runs"
+RUN_ROOT="$SCRIPT_DIR/sudoku_freeze_asymmetric_3runs"
 mkdir -p "$RUN_ROOT"
 MANIFEST_FILE="${RUN_ROOT}/run_manifest.txt"
 : > "$MANIFEST_FILE"
 
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting visual Sudoku freeze experiments across 5 runs (full split)"
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting visual Sudoku freeze experiments for Lx_H across 3 runs (full split)"
 
-for run_label in run1 run2 run3 run4 run5
+for run_label in run1 run2 run3
 do
   ckpt_step="step_26040"
   ckpt_dir="checkpoints/Sudoku/air_Lx_H_lr1e4_bs768_20k_epochs_${run_label}"
@@ -55,7 +56,10 @@ do
   done
 done
 
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] Computing 5-run aggregate summaries"
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] Computing 3-run aggregate summaries"
 python experiment_visual-sudoku-decoded-freeze/plot_sudoku_freeze.py --aggregate-manifest "$MANIFEST_FILE"
 
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] Completed visual Sudoku freeze experiments across 5 runs"
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] Plotting per-seed results"
+python experiment_visual-sudoku-decoded-freeze/plot_sudoku_freeze_per_seed.py --manifest "$MANIFEST_FILE"
+
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] Completed visual Sudoku freeze experiments for Lx_H across 3 runs"

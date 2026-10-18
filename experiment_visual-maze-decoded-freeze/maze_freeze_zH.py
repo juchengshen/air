@@ -27,11 +27,12 @@ from commons import (
     load_config_model_batches,
     markdown_table,
     metrics_table_rows,
+    summarize_scalars,
     write_json,
     write_markdown_table,
 )
 
-DEFAULT_OUT_DIR = os.path.join(SCRIPT_DIR, "test_maze_L2x_Hx_20k_epochs")
+DEFAULT_OUT_DIR = os.path.join(SCRIPT_DIR, "test_maze_Lx_Hx_20k_epochs")
 OUT_DIR = os.environ.get("AIR_MAZE_TEST_OUT_DIR", DEFAULT_OUT_DIR)
 if not os.path.isabs(OUT_DIR):
     OUT_DIR = os.path.join(SCRIPT_DIR, OUT_DIR)
@@ -145,8 +146,7 @@ def main():
     )
 
     table_headers = ["Metric", "N", "Mean", "Std", "SEM"]
-    table_rows = metrics_table_rows(
-        {
+    metric_values = {
             "Total solution-mask flips: normal": [
                 result["normal"]["total_mask_flips"] for result in paired_results
             ],
@@ -173,8 +173,12 @@ def main():
             ],
             "Exact accuracy: normal": [result["normal"]["exact_accuracy"] for result in paired_results],
             "Exact accuracy: freeze z_H": [result["freeze_zH"]["exact_accuracy"] for result in paired_results],
-        }
-    )
+    }
+    table_rows = metrics_table_rows(metric_values)
+    scalar_summaries = {
+        metric_name: summarize_scalars(values)
+        for metric_name, values in metric_values.items()
+    }
     table_text = markdown_table(table_headers, table_rows)
     write_markdown_table(
         os.path.join(OUT_DIR, "maze_freeze_zH_summary.md"),
@@ -212,6 +216,7 @@ def main():
                     "std": freeze_content_stats["std"],
                     "sem": freeze_content_stats["sem"],
                 },
+                "scalar_summaries": scalar_summaries,
                 "summary_table": table_rows,
             },
         },

@@ -9,12 +9,14 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
-# Addition/prepend/strip/no-strip 1net variants
+# Addition/prepend/strip/no-strip 1net variants on the symmetric Lx_Hx base (paper Table 2).
+# The matching no-token Lx_Hx baseline is
+# experiment_input-injection-specialization-sudoku/train_sudoku_Lx_Hx.sh.
 
 scripts=(
-  train_sudoku_L2x_H2x_input_token_addition.sh
-  train_sudoku_L2x_H2x_input_token_prepend.sh
-  train_sudoku_L2x_H2x_input_token_prepend_no_strip.sh
+  train_sudoku_Lx_Hx_input_token_addition.sh
+  train_sudoku_Lx_Hx_input_token_prepend.sh
+  train_sudoku_Lx_Hx_input_token_prepend_no_strip.sh
 )
 
 for s in "${scripts[@]}"; do

@@ -31,7 +31,7 @@ from commons import (
     write_markdown_table,
 )
 
-DEFAULT_OUT_DIR = os.path.join(SCRIPT_DIR, "test_sudoku_new_L2x_Hx_20k_epochs")
+DEFAULT_OUT_DIR = os.path.join(SCRIPT_DIR, "test_sudoku_new_Lx_Hx_20k_epochs")
 OUT_DIR = os.environ.get("AIR_SUDOKU_TEST_OUT_DIR", DEFAULT_OUT_DIR)
 if not os.path.isabs(OUT_DIR):
     OUT_DIR = os.path.join(SCRIPT_DIR, OUT_DIR)
@@ -264,6 +264,10 @@ def main():
 
     table_headers = ["Metric", "N", "Mean", "Std", "SEM"]
     table_rows = _table_rows_from_stats(metric_order, scalar_stats)
+    scalar_summaries = {
+        metric_name: scalar_stats[metric_name].summary()
+        for metric_name in metric_order
+    }
     table_text = markdown_table(table_headers, table_rows)
     write_markdown_table(
         os.path.join(OUT_DIR, "sudoku_freeze_zH_summary.md"),
@@ -300,6 +304,7 @@ def main():
                     "std": freeze_content_stats["std"],
                     "sem": freeze_content_stats["sem"],
                 },
+                "scalar_summaries": scalar_summaries,
                 "summary_table": table_rows,
             },
         },

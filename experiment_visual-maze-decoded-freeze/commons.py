@@ -64,7 +64,7 @@ def apply_maze_h_update(
     """Apply architecture-specific H update for Maze variants."""
     module_name = inner.__class__.__module__.rsplit(".", 1)[-1]
 
-    if module_name == "air_1net_L2x_Hx":
+    if module_name in {"air_1net_L2x_Hx", "air_1net_Lx_Hx"}:
         return inner.f_level(z_H + input_embeddings, z_L, **seq_info)
 
     return inner.f_level(z_H, z_L, **seq_info)

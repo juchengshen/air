@@ -32,28 +32,6 @@ Across Sudoku-Extreme and Maze-30×30, this single architectural detail causes t
   <img src="assets/air_architecture_diagram.png" alt="AIR architecture overview" width="720"/>
 </div>
 
-## ✨ Key Features
-
-- **Shared parameters, distinct roles** — one Transformer block, two latent states with mechanistically-different functional roles
-- **Half the parameters of HRM** — matches the two-network baseline (Wang et al. 2025) on Sudoku (60.0% vs 55.0%) and Maze (75.6% vs 74.5%)
-- **Asymmetric input is the necessary signal** — symmetric variants collapse to ~52% Sudoku / ~70% Maze; the 8-point gap on Sudoku is the cost of removing the asymmetry
-- **Prepend-and-strip level token recovers most of the gap** — adding a structurally separable state-identity token to the symmetric base lifts Sudoku from 50.9% → 57.5%
-- **Mechanistic split in attention** — L-updates concentrate ~47% more attention mass inside the constraint neighbourhood than H-updates at the deepest layer; on Sudoku, deeper layers additionally route attention to violated cells
-- **State coupling, not redundancy** — freeze experiments collapse final accuracy to 0% on both tasks; the two states are load-bearing in a coupled feedback loop
-- **Open-source reproduction** — every figure, table, and ablation in the paper has a corresponding shell script under `experiment_*/`
-
-### What the two states look like
-
-<p align="center">
-  <img src="assets/sudoku_decode.png" alt="Decoded zH vs zL on Sudoku — zH stays fully committed, zL holds some cells as BLANK and shifts those blanks across sub-steps" width="820"/>
-</p>
-<p align="center"><em>Sudoku &mdash; left columns: <strong>z<sub>H</sub></strong> (fully committed). Right columns: <strong>z<sub>L</sub></strong> (some cells held as <code>BLANK</code>; the held-back set shifts across sub-steps).</em></p>
-
-<p align="center">
-  <img src="assets/maze_decode.png" alt="Decoded zH vs zL on a 30x30 Maze — zH commits to a complete layout, zL leaves regions undecided and rearranges its uncertainty" width="820"/>
-</p>
-<p align="center"><em>Maze-30&times;30 &mdash; <strong>z<sub>H</sub></strong> commits to a full layout; <strong>z<sub>L</sub></strong> holds regions as <code>PAD</code> and revises them locally as the rollout progresses.</em></p>
-
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -110,48 +88,9 @@ bash experiment_input-injection-specialization-sudoku/train_sudoku_Lx_H.sh
 bash experiment_input-injection-specialization-maze/train_maze_Lx_H.sh
 ```
 
-### Reproduce the full injection-asymmetry ablation (all 8 variants × 5 seeds)
+### Reproduce the paper results
 
-```bash
-bash experiment_input-injection-specialization-sudoku/run_all_input_injection_specialization.sh
-bash experiment_input-injection-specialization-maze/run_all_input_injection_specialization.sh
-```
-
-If you are not on a Slurm cluster, run individual `train_*.sh` scripts directly (each is a single-GPU launch). Variant naming follows the paper: `L_Hx`, `Lx_H`, `L_H2x`, `L2x_H`, `Lx_H2x`, `L2x_Hx`, `Lx_Hx`, `L2x_H2x`.
-
-### Level-token control (Section 4 of the paper)
-
-```bash
-bash experiment_addition-prepend-strip-no-strip/run_all_addition_prepend_strip_no_strip.sh
-```
-
-### Operator-form control (Appendix)
-
-```bash
-bash experiment_operator-form-control/run_all_operator_form_control.sh
-```
-
-## 📁 Repository Structure
-
-```
-├── pretrain.py                                # Training entry point (Hydra-configured)
-├── evaluate.py                                # Held-out evaluation
-├── puzzle_dataset.py                          # Puzzle-token dataset wrapper
-├── config/                                    # Default architecture + training configs
-├── dataset/                                   # Sudoku-Extreme + Maze-30×30 builders
-├── models/
-│   └── air/                                   # AIR architecture variants (shared block, two states)
-├── experiment_input-injection-specialization-sudoku/  # 8 AIR variants × 5 seeds on Sudoku
-├── experiment_input-injection-specialization-maze/    # 8 AIR variants × 5 seeds on Maze
-├── experiment_addition-prepend-strip-no-strip/        # Level-token controls (addition / prepend-strip / prepend-no-strip)
-├── experiment_operator-form-control/                  # Linear, nonlinear, Hadamard, sign-flip input transforms
-├── experiment_visual-sudoku-decoded-freeze/           # Decoded zH/zL rollouts + freeze interventions (Sudoku)
-├── experiment_visual-maze-decoded-freeze/             # Decoded zH/zL rollouts + freeze interventions (Maze)
-├── experiment_attention-analysis-sudoku/              # Attention contrasts (bar charts + example heatmaps)
-├── experiment_attention-analysis-maze/                # Maze counterpart
-├── adam_atan2.zip                             # Bundled AdamATan2 optimizer; unzip before training
-└── requirements.txt
-```
+Each paper experiment has its own `experiment_*/` sub-directory: run the bash scripts in the corresponding sub-directory to reproduce that part of the paper. `run_all_*.sh` scripts submit a full sweep with `sbatch`; on a machine without Slurm, run the individual `train_*.sh` scripts directly. Evaluation scripts (decoding, freeze, attention) read trained checkpoints from `checkpoints/`; edit the path at the top of a script if yours live elsewhere.
 
 ## 💻 Hardware
 
@@ -162,113 +101,6 @@ bash experiment_operator-form-control/run_all_operator_form_control.sh
 | Any Ampere or newer GPU | Inference / freeze / attention analysis | ≤ 16 GB sufficient for batched eval |
 
 Total compute reported in the paper (all sweeps + preliminary runs): ~500 GPU-hours.
-
-## 📊 Results Highlights
-
-### Injection-asymmetry ablation — asymmetric matches the two-network baseline at half the parameters
-
-All numbers are mean ± standard deviation across 5 training seeds, evaluated on the full held-out test sets (422,786 Sudoku puzzles, 1,000 mazes). **Bold** marks the per-column winner.
-
-| Variant | $(n_L, n_H)$ | $\Delta$ | Sudoku (%) | Maze (%) |
-|---------|:---:|:---:|:---:|:---:|
-| *Asymmetric ($\Delta > 0$)* | | | | |
-| L_Hx | (0, 1) | 1 | 58.7 ± 3.3 | 75.3 ± 3.2 |
-| **Lx_H** *(default)* | (1, 0) | 1 | **60.0 ± 2.0** | 71.0 ± 6.3 |
-| L_H2x | (0, 2) | 2 | 58.6 ± 1.9 | **75.6 ± 1.9** |
-| L2x_H | (2, 0) | 2 | 59.1 ± 2.4 | 71.1 ± 6.4 |
-| Lx_H2x | (1, 2) | 1 | 59.6 ± 0.9 | 70.9 ± 2.4 |
-| L2x_Hx | (2, 1) | 1 | 58.6 ± 2.9 | 74.5 ± 1.6 |
-| *Group mean (asym)* | — | — | *59.1* | *73.1* |
-| *Symmetric ($\Delta = 0$)* | | | | |
-| Lx_Hx | (1, 1) | 0 | 52.1 ± 1.6 | 69.4 ± 2.5 |
-| L2x_H2x | (2, 2) | 0 | 50.9 ± 2.9 | 70.3 ± 4.2 |
-| *Group mean (sym)* | — | — | *51.5* | *69.9* |
-| *Two-network baseline* | | | | |
-| HRM (Wang et al. 2025) | — | — | 55.0 | 74.5 |
-
-**Headline:** the asymmetric group averages ~7.6 points higher than the symmetric group on Sudoku and ~3.2 points higher on Maze, and the best AIR variants match or exceed HRM with half the Transformer parameters.
-
-### Level-token control — a structurally separable state-identity signal recovers most of the gap
-
-| Level-token strategy | Mechanism | Sudoku (%) |
-|---|---|:---:|
-| L2x_H2x (symmetric base, no token) | — | 50.9 ± 2.9 |
-| &nbsp; + Addition | element-wise add to every token | 50.0 ± 1.9 |
-| &nbsp; + **Prepend (strip)** | prepend, attend, then strip | **57.5 ± 1.3** |
-| &nbsp; + Prepend (no strip) | prepend, persist across cycles | 47.8 ± 1.6 |
-| *For reference:* asymmetric $\Delta = 1$ | — | *~59.0* |
-
-A level token that occupies its own sequence position (prepend + strip) recovers most of the asymmetric-injection benefit. Mixing the signal into every content token (addition) or letting it accumulate content (no strip) does not work.
-
-### Mechanistic split in attention — L is consistently more local than H
-
-| Layer | $\Delta_{\mathrm{nbr}}$ (control) | $\Delta_{\mathrm{ent}}$ (control) | $\Delta_{\mathrm{viol}}$ (violation-adj.) |
-|:---:|:---:|:---:|:---:|
-| 0 | 0.050 ± 0.001 | 0.053 ± 0.000 | −0.018 ± 0.002 |
-| 1 | 0.015 ± 0.001 | 0.023 ± 0.000 | 0.006 ± 0.001 |
-| 2 | 0.138 ± 0.001 | 0.125 ± 0.001 | 0.028 ± 0.001 |
-| 3 | 0.244 ± 0.002 | 0.182 ± 0.002 | 0.037 ± 0.002 |
-
-L-updates put **~47% more attention mass** inside the constraint neighbourhood than H-updates at the deepest layer (Sudoku, control queries). Violation-specific routing emerges only in the deeper layers.
-
-<p align="center">
-  <img src="assets/sudoku_attention_example.png" alt="A single Sudoku puzzle showing the L-update attention concentrating inside the constraint neighbourhood while the H-update spreads attention across the full board" width="820"/>
-</p>
-<p align="center"><em>One blank query cell (puzzle <code>p0121</code>, query <code>r2c6</code>, layer 0). The L-update places about <strong>0.81</strong> of its attention mass inside the constraint neighbourhood; the H-update places only <strong>0.24</strong>. Same puzzle, same query, same head &mdash; only the update type differs.</em></p>
-
-
-### Freeze interventions — both states are load-bearing
-
-| Task | Intervention | Total content change | Final accuracy |
-|---|---|:---:|:---:|
-| Sudoku | normal | $\mathbf{z}_L$: 1,235 / $\mathbf{z}_H$: 275 | 55.1% |
-| Sudoku | freeze $\mathbf{z}_H$ → measure $\mathbf{z}_L$ | $\mathbf{z}_L$: 323 (↓) | 0% |
-| Sudoku | freeze $\mathbf{z}_L$ → measure $\mathbf{z}_H$ | $\mathbf{z}_H$: 551 (↑) | 0% |
-| Maze | normal | $\mathbf{z}_L$: 1,290 / $\mathbf{z}_H$: 825 | 71.0% |
-| Maze | freeze $\mathbf{z}_H$ → measure $\mathbf{z}_L$ | $\mathbf{z}_L$: 2,305 (↑) | 0% |
-| Maze | freeze $\mathbf{z}_L$ → measure $\mathbf{z}_H$ | $\mathbf{z}_H$: 2,880 (↑) | 0% |
-
-## 🔬 Reproducing the headline tables
-
-The experiment folders ship `run_all_*.sh` scripts that submit the full sweep via `sbatch`. To run a single variant directly:
-
-```bash
-# Sudoku — default AIR
-bash experiment_input-injection-specialization-sudoku/train_sudoku_Lx_H.sh
-
-# Sudoku — symmetric control
-bash experiment_input-injection-specialization-sudoku/train_sudoku_Lx_Hx.sh
-
-# Level-token (prepend-and-strip) on the symmetric base
-bash experiment_addition-prepend-strip-no-strip/train_sudoku_L2x_H2x_input_token_prepend.sh
-```
-
-### Visual decoded-state and freeze experiments
-
-Both `experiment_visual-*-decoded-freeze/` folders contain `decode_*_intermediate_first_10.sh`, `*_freeze_zH_zL_*5runs.sh`, and `*_freeze_zH_zL_symmetric.sh`. These require trained checkpoints; by default they look under `checkpoints/` paths configured in each script. Override via `AIR_SUDOKU_CKPT_PATH` / `AIR_MAZE_CKPT_PATH`, or edit the path at the top of the script.
-
-### Attention analysis
-
-```bash
-# Bar-chart data + multi-layer figure
-bash experiment_attention-analysis-sudoku/generate_bar_data.sh
-bash experiment_attention-analysis-sudoku/multilayer_figure.sh
-
-# Maze counterparts
-bash experiment_attention-analysis-maze/generate_bar_data.sh
-bash experiment_attention-analysis-maze/multilayer_figure.sh
-```
-
-`generate_bar_data.py` captures L/H attention maps over 1,000 test puzzles at sub-steps {2, 4, 6, 8, 10, 12, 14, 15} and writes per-layer JSON into `bar_data/`.
-
-### Causal attention interventions
-
-```bash
-bash experiment_attention-intervention/run_interventions_sudoku.sh
-bash experiment_attention-intervention/run_interventions_maze.sh
-```
-
-These evaluate the five `Lx_H` checkpoints on the first 1,000 test puzzles under each attention intervention (L/H attention made uniform, restricted to the query neighborhood, restricted to a random set of the same size, or with the neighborhood removed). Per-seed results go to `results_{sudoku,maze}/run{1..5}.json`, and `aggregate_interventions.py` writes the mean ± SD table and Welch t-tests to `summary.md`. Edit the checkpoint paths at the top of each script if your checkpoints live elsewhere.
 
 ## 📝 Citation
 
