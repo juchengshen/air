@@ -261,6 +261,15 @@ bash experiment_attention-analysis-maze/multilayer_figure.sh
 
 `generate_bar_data.py` captures L/H attention maps over 1,000 test puzzles at sub-steps {2, 4, 6, 8, 10, 12, 14, 15} and writes per-layer JSON into `bar_data/`.
 
+### Causal attention interventions
+
+```bash
+bash experiment_attention-intervention/run_interventions_sudoku.sh
+bash experiment_attention-intervention/run_interventions_maze.sh
+```
+
+These evaluate the five `Lx_H` checkpoints on the first 1,000 test puzzles under each attention intervention (L/H attention made uniform, restricted to the query neighborhood, restricted to a random set of the same size, or with the neighborhood removed). Per-seed results go to `results_{sudoku,maze}/run{1..5}.json`, and `aggregate_interventions.py` writes the mean ± SD table and Welch t-tests to `summary.md`. Edit the checkpoint paths at the top of each script if your checkpoints live elsewhere.
+
 ## 📝 Citation
 
 ```bibtex
