@@ -15,6 +15,10 @@
 
 ---
 
+## 📰 News
+
+- **[2026/09]** 🎉 **One Model, Two Roles** has been accepted to **NeurIPS 2026**.
+
 > **"One Model, Two Roles: Emergent Specialization in a Shared Recurrent Transformer"**<br>
 > *[Jucheng Shen](https://juchengshen.github.io/)\*, [Wenyi Su](https://www.linkedin.com/in/barbara-su-966314268/)\*, [Anastasios Kyrillidis](https://akyrillidis.github.io/about/)*<br>
 > [arXiv:2605.17811](https://arxiv.org/abs/2605.17811)
