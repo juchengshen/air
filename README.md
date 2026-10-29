@@ -21,7 +21,7 @@
 
 > **"One Model, Two Roles: Emergent Specialization in a Shared Recurrent Transformer"**<br>
 > *[Jucheng Shen](https://juchengshen.github.io/)\*, [Wenyi Su](https://www.linkedin.com/in/barbara-su-966314268/)\*, [Anastasios Kyrillidis](https://akyrillidis.github.io/about/)*<br>
-> [arXiv:2605.17811](https://arxiv.org/abs/2605.17811)
+> **NeurIPS 2026** · [arXiv:2605.17811](https://arxiv.org/abs/2605.17811)
 
 Can a shared-weight recurrent Transformer develop **two distinct internal roles** without being partitioned into separate modules? AIR (Asymmetric Input Recurrence) is a minimal two-state reasoning architecture in which the **same** Transformer block is reused for both updates, and the only built-in asymmetry is that the encoded input is injected during L-updates but not H-updates:
 
@@ -109,12 +109,14 @@ Total compute reported in the paper (all sweeps + preliminary runs): ~500 GPU-ho
 ## 📝 Citation
 
 ```bibtex
-@article{shen2026air,
-  title   = {One Model, Two Roles: Emergent Specialization in a Shared Recurrent Transformer},
-  author  = {Shen, Jucheng and Su, Wenyi and Kyrillidis, Anastasios},
-  journal = {arXiv preprint arXiv:2605.17811},
-  year    = {2026},
-  url     = {https://arxiv.org/abs/2605.17811}
+@inproceedings{shen2026air,
+  title         = {One Model, Two Roles: Emergent Specialization in a Shared Recurrent Transformer},
+  author        = {Shen, Jucheng and Su, Wenyi and Kyrillidis, Anastasios},
+  booktitle     = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year          = {2026},
+  eprint        = {2605.17811},
+  archivePrefix = {arXiv},
+  url           = {https://arxiv.org/abs/2605.17811}
 }
 ```
 
